@@ -1,0 +1,8 @@
+  name: employee-rest
+  path: target/employee-rest-0.0.1-SNAPSHOT.jar
+  buildpack: https://github.com/cloudfoundry/java-buildpack.git
+  memory: 1G
+  instances: 1
+  services:
+    - mymongodb
+    - employee-cache
