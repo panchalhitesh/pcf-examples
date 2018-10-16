@@ -13,6 +13,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.mockito.Mockito.mock;
 import static reactor.core.publisher.Mono.just;
@@ -40,15 +41,32 @@ public class EmployeeServiceApplicationTests {
 
 		postResponse
 				.map(WebTestClient.ResponseSpec::expectBody)
-				.subscribe(responseBody -> log.debug("Saved data Response: "
+				.subscribe(responseBody -> log.info("Saved data Response: "
 						+responseBody.returnResult()));
 	}
+
+	@Test
+	public void testfindAll(){
+		final Mono<WebTestClient.ResponseSpec> getResponse = just(
+				webTestClient
+						.get()
+						.uri("/employees/findAll")
+						.accept(MediaType.APPLICATION_JSON_UTF8)
+						.exchange());
+
+		getResponse
+				.map(WebTestClient.ResponseSpec::expectBody)
+				.subscribe(responseBody -> log.info("Response: "
+						+responseBody.returnResult()));
+	}
+
+
 
 	private Employee getEmployeeObject(){
 		 Employee employee = new Employee();
 		 employee.setFirstName("testFirst");
 		 employee.setLastName("testFirst");
-		 employee.setBirthDate(LocalDate.now());
+		 employee.setBirthDate(LocalDateTime.now());
 		return employee;
 	}
 

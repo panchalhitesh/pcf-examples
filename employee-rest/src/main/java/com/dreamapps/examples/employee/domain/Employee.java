@@ -31,7 +31,7 @@ public class Employee {
     private String lastName;
 
     @Builder.Default()
-    private LocalDate birthDate =  LocalDate.now();
+    private LocalDateTime birthDate =  LocalDateTime.now();
 
     @Builder.Default()
     private LocalDateTime lastModified = LocalDateTime.now();
