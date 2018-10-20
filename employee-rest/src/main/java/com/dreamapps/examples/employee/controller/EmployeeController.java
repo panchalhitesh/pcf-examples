@@ -47,7 +47,7 @@ public class EmployeeController {
     @GetMapping(value = "/findByBirthDate")
     @ApiOperation(value = "Returns all employees with provided Birthdate")
     @Cacheable(value = "employees", key = "#employee.birthDate")
-    public Flux<Employee> getAllEmployeesByBirthDate(@RequestBody LocalDateTime localDateTime){
+    public Flux<Employee> getAllEmployeesByBirthDate(@RequestParam LocalDateTime localDateTime){
         return employeeService.getEmployeesByBirthDate(localDateTime);
     }
 
