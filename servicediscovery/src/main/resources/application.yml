@@ -1,13 +1,19 @@
 spring:
   application:
     name: service-gateway
-  #cloud:
-    #gateway:
-      #routes:
-     # - id: baeldung_route
-        #uri: http://baeldung.com
-        #predicates:
-       # - Path=/baeldung/
+  cloud:
+    gateway:
+      routes:
+      - id: employee-service
+        uri: lb://employee-service
+        predicates:
+          - Path=/**
+        filters:
+          - RewritePath=/(?<RID>.*),/$\{RID}
+      discovery:
+        locator:
+          enabled: true
+
   boot:
     admin:
       client:
