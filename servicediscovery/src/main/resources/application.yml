@@ -3,13 +3,6 @@ spring:
     name: service-gateway
   cloud:
     gateway:
-      routes:
-      - id: employee-service
-        uri: lb://employee-service
-        predicates:
-          - Path=/**
-        filters:
-          - RewritePath=/(?<RID>.*),/$\{RID}
       discovery:
         locator:
           enabled: true
