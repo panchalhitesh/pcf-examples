@@ -23,6 +23,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Finchley.SR1</spring-cloud.version>
+		<spring.cloud.k8s.version>1.0.0.M1</spring.cloud.k8s.version>
+		<jib-maven-plugin.version>0.9.11</jib-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -43,6 +45,11 @@
 			<groupId>org.jolokia</groupId>
 			<artifactId>jolokia-core</artifactId>
 			<version>1.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-kubernetes</artifactId>
+			<version>${spring.cloud.k8s.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -97,7 +104,7 @@
 			<plugin>
 				<groupId>com.google.cloud.tools</groupId>
 				<artifactId>jib-maven-plugin</artifactId>
-				<version>0.9.11</version>
+				<version>${jib-maven-plugin.version}</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
