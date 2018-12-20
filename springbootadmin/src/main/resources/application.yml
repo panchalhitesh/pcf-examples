@@ -2,6 +2,15 @@
 spring:
   application:
     name: springbootadmin
+  boot:
+    admin:
+      context-path: /admin
+  kubernetes:
+    discovery:
+      enabled: true
+      catalog-services-watch:
+        enabled: true
+        catalogServicesWatchDelay: 10000
 eureka:
   instance:
     leaseRenewalIntervalInSeconds: 10
