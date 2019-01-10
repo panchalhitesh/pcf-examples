@@ -1,0 +1,102 @@
+spring:
+  application:
+    name: service-gateway
+  cloud:
+    discovery:
+      client:
+        health-indicator:
+          enabled: true
+    config:
+      enabled: false
+      uri: http://configserver:8088
+      discovery:
+        locator:
+          enabled: true
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: static_altimaxcourier
+          uri: https://atdconnectqa.atdconnect.com
+          predicates:
+            - Path=/altimaxcourier/**
+          filters:
+            - RewritePath=/altimaxcourier/(?<remaining>.*), /${remaining}
+            - Hystrix=altimaxcourier
+            - name: Hystrix
+              args:
+                name: fallbackcmd
+                fallbackUri: forward:/incaseoffailureusethis
+            - name: Retry
+              args:
+                retries: 3
+                statuses: BAD_GATEWAY
+        - id: atdconnect
+          uri: lb://atdconnect
+          #uri: https://atdconnectqa.atdconnect.com
+          predicates:
+            - Path=/atdconnect/**
+          filters:
+            - RewritePath=/atdconnect/(?<remaining>.*), /${remaining}
+            - Hystrix=atdconnect
+            - name: Hystrix
+              args:
+                name: fallbackcmd
+                fallbackUri: forward:/incaseoffailureusethis
+            - name: Retry
+              args:
+                retries: 3
+                statuses: BAD_GATEWAY
+  boot:
+    admin:
+      client:
+        enabled: true
+        url: http://ecommerceadminconsole:8181/admin
+
+  redis:
+    url: redis://redisdistributedcache:6379
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    health-check-url-path: /actuator/health
+  client:
+    enabled: false
+hystrix:
+  metrics:
+    enabled: true
+    polling-interval-ms: 2000
+
+management:
+  endpoints:
+    hystrix:
+      stream:
+        enabled: true
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+logging:
+  level:
+    ROOT: INFO
+    com.atd.ecommerce.microservices.core.apigateway: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+server:
+  port: 9191
+#Ribbon Proxy URls
+altimaxcourier:
+  ribbon:
+    eureka:
+      enabled: false
+    listOfServers: http://track.altimaxcourier.com
+    ServerListRefreshInterval: 15000
+
+atdconnect:
+  ribbon:
+    eureka:
+      enabled: false
+    listOfServers: atdconnectqa.atdconnect.com:80
+    ServerListRefreshInterval: 15000
